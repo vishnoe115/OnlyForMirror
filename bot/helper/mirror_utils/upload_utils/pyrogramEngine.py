@@ -50,7 +50,7 @@ class TgUploader:
         size = get_readable_file_size(get_path_size(path))
         for dirpath, subdir, files in sorted(walk(path)):
             for file_ in sorted(files):
-                if not file_.lower().endswith(tuple(EXTENTION_FILTER)):
+                if not file_.lower().endswith(tuple(EXTENSION_FILTER)):
                     self.__total_files += 1
                     up_path = ospath.join(dirpath, file_)
                     if ospath.getsize(up_path) == 0:
