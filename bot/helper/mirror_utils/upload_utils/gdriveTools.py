@@ -1,4 +1,4 @@
-from logging import getLogger, ERROR
+from logging import getLogger, ERROR, DEBUG
 from time import time
 from pickle import load as pload
 from json import loads as jsnloads
@@ -18,7 +18,7 @@ from tenacity import retry, wait_exponential, stop_after_attempt, retry_if_excep
 from bot.helper.telegram_helper.button_build import ButtonMaker
 from bot import parent_id, DOWNLOAD_DIR, IS_TEAM_DRIVE, INDEX_URL, USE_SERVICE_ACCOUNTS, BUTTON_FOUR_NAME, \
                 BUTTON_FOUR_URL, BUTTON_FIVE_NAME, BUTTON_FIVE_URL, BUTTON_SIX_NAME, BUTTON_SIX_URL, VIEW_LINK, \
-                DRIVES_NAMES, DRIVES_IDS, INDEX_URLS, EXTENSION_FILTER
+                DRIVES_NAMES, DRIVES_IDS, INDEX_URLS, EXTENSION_FILTER, SOURCE_LINK
 from bot.helper.ext_utils.telegraph_helper import telegraph
 from bot.helper.ext_utils.bot_utils import get_readable_file_size, setInterval
 from bot.helper.ext_utils.fs_utils import get_mime_type, get_path_size
@@ -357,12 +357,12 @@ class GoogleDriveHelper:
                 msg += f'\n<b>Files: </b>{self.__total_files}'
                 buttons = ButtonMaker()
                 durl = short_url(durl)
-                buttons.buildbutton("Drive Link", durl)
+                buttons.buildbutton("☁️ Drive Link ☁️", durl)
                 if INDEX_URL is not None:
                     url_path = rquote(f'{meta.get("name")}', safe='')
                     url = f'{INDEX_URL}/{url_path}/'
                     url = short_url(url)
-                    buttons.buildbutton("Index Link", url)
+                    buttons.buildbutton("⚡ Index Link ⚡", url)
             else:
                 file = self.__copyFile(meta.get('id'), parent_id)
                 msg += f'<b>Name: </b><code>{file.get("name")}</code>'
@@ -378,7 +378,7 @@ class GoogleDriveHelper:
                     url_path = rquote(f'{file.get("name")}', safe='')
                     url = f'{INDEX_URL}/{url_path}'
                     url = short_url(url)
-                    buttons.buildbutton("Index Link", url)
+                    buttons.buildbutton("⚡ Index Link ⚡", url)
                     if VIEW_LINK:
                         urls = f'{INDEX_URL}/{url_path}?a=view'
                         urls = short_url(urls)
@@ -389,6 +389,8 @@ class GoogleDriveHelper:
                 buttons.buildbutton(f"{BUTTON_FIVE_NAME}", f"{BUTTON_FIVE_URL}")
             if BUTTON_SIX_NAME is not None and BUTTON_SIX_URL is not None:
                 buttons.buildbutton(f"{BUTTON_SIX_NAME}", f"{BUTTON_SIX_URL}")
+            if SOURCE_LINK is True:
+                buttons.buildbutton(f"🔗 Source Link", link)    
         except Exception as err:
             if isinstance(err, RetryError):
                 LOGGER.info(f"Total Attempts: {err.last_attempt.attempt_number}")
