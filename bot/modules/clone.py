@@ -138,6 +138,13 @@ def _clone(message, bot, multi=0):
                     bot.sendMessage(chat_id=chatid, text=result + cc, reply_markup=button, parse_mode=ParseMode.HTML)
             except Exception as e:
                 LOGGER.warning(e)
+        if BOT_PM and message.chat.type != 'private':
+            try:
+                bot.sendMessage(message.from_user.id, text=result, reply_markup=button,
+                                parse_mode=ParseMode.HTML)
+            except Exception as e:
+                LOGGER.warning(e)
+                return
         
     else:
         sendMessage('Send Gdrive or gdtot or appdrive link along with command or by replying to the link by command', bot, message)
