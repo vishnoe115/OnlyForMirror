@@ -5,7 +5,7 @@ from threading import Thread
 from time import sleep
 
 from bot.helper.mirror_utils.upload_utils.gdriveTools import GoogleDriveHelper
-from bot.helper.telegram_helper.message_utils import sendMessage, sendMarkup, deleteMessage, delete_all_messages, update_all_messages, sendStatusMessage
+from bot.helper.telegram_helper.message_utils import sendMessage, sendMarkup, deleteMessage, delete_all_messages, update_all_messages, auto_delete_message, sendStatusMessage
 from bot.helper.telegram_helper.filters import CustomFilters
 from bot.helper.telegram_helper.bot_commands import BotCommands
 from bot.helper.mirror_utils.status_utils.clone_status import CloneStatus
@@ -108,7 +108,7 @@ def _clone(message, bot, multi=0):
         else:
             msg = sendMarkup(result + cc, bot, message, button)
             LOGGER.info(f'Cloning Done: {name}')
-            Thread(target=auto_delete_upload_message, args=(bot, message, msg)).start()
+            Thread(target=auto_delete_message, args=(bot, message, msg)).start()
         if is_gdtot:
             gd.deletefile(link)
         elif is_appdrive:
