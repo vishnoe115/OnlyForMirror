@@ -244,6 +244,14 @@ class MirrorListener:
             if BUTTON_SIX_NAME is not None and BUTTON_SIX_URL is not None:
                 buttons.buildbutton(f"{BUTTON_SIX_NAME}", f"{BUTTON_SIX_URL}")
             sendMarkup(msg, self.bot, self.message, InlineKeyboardMarkup(buttons.build_menu(2)))
+            if MIRROR_LOGS:
+                try:
+                    for chatid in MIRROR_LOGS:
+                        bot.sendMessage(chat_id=chatid, text=msg,
+                                        reply_markup=InlineKeyboardMarkup(buttons.build_menu(2)),
+                                        parse_mode=ParseMode.HTML)
+                except Exception as e:
+                    LOGGER.warning(e)
             if self.isQbit and QB_SEED and not self.extract:
                 if self.isZip:
                     try:
