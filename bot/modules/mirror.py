@@ -254,7 +254,6 @@ class MirrorListener:
                         fmsg = ''
                 if fmsg != '':
                     uploadmsg = sendMarkup(msg + fmsg, self.bot, self.message, InlineKeyboardMarkup(buttons.build_menu(2)))
-                    Thread(target=auto_delete_upload_message, args=(bot, self.message, uploadmsg)).start()
         else:
             msg += f'\n\n<b>Type: </b>{typ}'
             if ospath.isdir(f'{DOWNLOAD_DIR}{self.uid}/{name}'):
