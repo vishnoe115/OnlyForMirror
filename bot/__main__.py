@@ -44,42 +44,32 @@ def stats(update, context):
     mem_t = get_readable_file_size(memory.total)
     mem_a = get_readable_file_size(memory.available)
     mem_u = get_readable_file_size(memory.used)
-    stats = f'<b>╭─《 BOT STATISTICS 》</b>\n' \
-                    f'<b>│</b>\n' \
-                    f'<b>├  𝙲𝙾𝙼𝙼𝙸𝚃 𝙳𝙰𝚃𝙴:</b> {last_commit}\n'\
-                    f'<b>├  𝙾𝙽𝙻𝙸𝙽𝙴 𝚃𝙸𝙼𝙴:</b> {currentTime}\n'\
-                    f'<b>├  𝙾𝚂 𝚄𝙿𝚃𝙸𝙼𝙴:</b> {osUptime}\n'\
-                    f'<b>├  𝙳𝙸𝚂𝙺 𝚂𝙿𝙰𝙲𝙴:</b> {total}\n'\
-                    f'<b>├  𝙳𝙸𝚂𝙺 𝚂𝙿𝙰𝙲𝙴 𝚄𝚂𝙴𝙳:</b> {used}\n'\
-                    f'<b>├  𝙳𝙸𝚂𝙺 𝚂𝙿𝙰𝙲𝙴 𝙵𝚁𝙴𝙴:</b> {free}\n'\
-                    f'<b>├  𝚄𝙿𝙻𝙾𝙰𝙳 𝙳𝙰𝚃𝙰:</b> {sent}\n'\
-                    f'<b>├  𝙳𝙾𝚆𝙽𝙻𝙾𝙰𝙳 𝙳𝙰𝚃𝙰:</b> {recv}\n'\
-                    f'<b>├  𝙲𝙿𝚄 𝚄𝚂𝙰𝙶𝙴:</b> {cpuUsage}%\n'\
-                    f'<b>├  𝚁𝙰𝙼:</b> {mem_p}%\n'\
-                    f'<b>├  𝙳𝙸𝚂𝙺 𝚄𝚂𝙴𝙳:</b> {disk}%\n'\
-                    f'<b>├  𝙿𝙷𝚈𝚂𝙸𝙲𝙰𝙻 𝙲𝙾𝚁𝙴𝚂:</b> {p_core}\n'\
-                    f'<b>├  𝚃𝙾𝚃𝙰𝙻 𝙲𝙾𝚁𝙴𝚂:</b> {t_core}\n'\
-                    f'<b>├  𝚂𝚆𝙰𝙿:</b> {swap_t}\n'\
-                    f'<b>├  𝚂𝚆𝙰𝙿 𝚄𝚂𝙴𝙳:</b> {swap_p}%\n'\
-                    f'<b>├  𝚃𝙾𝚃𝙰𝙻 𝙾𝙵 𝙼𝙴𝙼𝙾𝚁𝚈:</b> {mem_t}\n'\
-                    f'<b>├  𝙵𝚁𝙴𝙴 𝙾𝙵 𝙼𝙴𝙼𝙾𝚁𝚈:</b> {mem_a}\n'\
-                    f'<b>╰  𝚄𝚂𝙰𝙶𝙴 𝙾𝙵 𝙼𝙴𝙼𝙾𝚁𝚈:</b> {mem_u}\n'
-    sendMessage(stats, context.bot, update.message)
+    stats = f'<b><i><u>NSFW Mirror Bot Statistics</u></i></b>\n\n'\
+            f'<b>Updated:</b> <code>{last_commit}</code>\n'\
+            f'<b>I am Working For:</b> <code>{currentTime}</code>\n'\
+            f'<b>Total Disk:</b> <code>{total}</code> [{disk}% In use]\n'\
+            f'<b>Used:</b> <code>{used}</code> | <b>Free:</b> <code>{free}</code>\n'\
+            f'<b>T-Up:</b> <code>{sent}</code> | <b>T-Dn:</b> <code>{recv}</code>\n'\
+            f'<b>CPU Usage:</b> <code>{cpuUsage}</code>% | <b>RAM Usage:</b> <code>{mem_p}%</code>\n'
+    reply_message = sendMessage(stats, context.bot, update.message)
+    Thread(target=auto_delete_message, args=(context.bot, update.message, reply_message)).start()
 
 
 def start(update, context):
     buttons = ButtonMaker()
-    buttons.buildbutton("Owner", "https://t.me/Dhruv444")
     buttons.buildbutton("Report Group", "https://t.me/OTDiscussion")
+    buttons.buildbutton("Alt Report Group", "https://t.me/mirrorsociety")
+    buttons.buildbutton("Mirror Group", "https://t.me/dhruvmirrorupdates")
+    buttons.buildbutton("Owner", "https://t.me/dhruv444")
     reply_markup = InlineKeyboardMarkup(buttons.build_menu(2))
     if CustomFilters.authorized_user(update) or CustomFilters.authorized_chat(update):
         start_string = f'''
-This bot can mirror all your links to Google Drive!
+Welcome | Dhruv Mirror Bot is ready for you
 Type /{BotCommands.HelpCommand} to get a list of available commands
 '''
         sendMarkup(start_string, context.bot, update.message, reply_markup)
     else:
-        sendMarkup('Not Authorized user, deploy your own mirror-leech bot', context.bot, update.message, reply_markup)
+        sendMarkup('Sorry, You cannot use me', context.bot, update.message, reply_markup)
 
 def restart(update, context):
     restart_message = sendMessage("Restarting...", context.bot, update.message)
@@ -115,7 +105,7 @@ help_string_telegraph = f'''<br>
 <br><br>
 <b>/{BotCommands.UnzipMirrorCommand}</b> [download_url][magnet_link]: Start mirroring and upload the file/folder extracted from any archive extension
 <br><br>
-<b>/{BotCommands.QbMirrorCommand}</b> [magnet_link][torrent_file][torrent_file_url]: Start Mirroring using qBittorrent, Use <b>/{BotCommands.QbMirrorCommand} s</b> to select files before downloading
+<b>/{BotCommands.QbMirrorCommand}</b> [magnet_link][torrent_file][torrent_file_url]: Start Mirroring using qBittorrent. Send <b>/{BotCommands.QbMirrorCommand}</b> for more help
 <br><br>
 <b>/{BotCommands.QbZipMirrorCommand}</b> [magnet_link][torrent_file][torrent_file_url]: Start mirroring using qBittorrent and upload the file/folder compressed with zip extension
 <br><br>
@@ -151,6 +141,8 @@ help_string_telegraph = f'''<br>
 <br><br>
 <b>/{BotCommands.SetThumbCommand}</b>: Reply photo to set it as Thumbnail
 <br><br>
+<b>/{BotCommands.BtSelectCommand}</b>: Reply to an active /cmd which was used to start the bt-download or add gid along with cmd. This command mainly for selection incase you decided to select files from already added torrent. But you can always use /cmd with arg `s` to select files before download start
+<br><br>
 <b>/{BotCommands.RssListCommand}</b>: List all subscribed rss feed info
 <br><br>
 <b>/{BotCommands.RssGetCommand}</b>: [Title] [Number](last N links): Force fetch last N links
@@ -175,39 +167,33 @@ help_string_telegraph = f'''<br>
 '''
 
 help = telegraph.create_page(
-        title='Mirror-Leech-Bot Help',
+        title= f'{TITLE_NAME} Help',
         content=help_string_telegraph,
     )["path"]
 
 help_string = f'''
 /{BotCommands.PingCommand}: Check how long it takes to Ping the Bot
-
 /{BotCommands.AuthorizeCommand}: Authorize a chat or a user to use the bot (Can only be invoked by Owner & Sudo of the bot)
-
 /{BotCommands.UnAuthorizeCommand}: Unauthorize a chat or a user to use the bot (Can only be invoked by Owner & Sudo of the bot)
-
 /{BotCommands.AuthorizedUsersCommand}: Show authorized users (Only Owner & Sudo)
-
 /{BotCommands.AddSudoCommand}: Add sudo user (Only Owner)
-
 /{BotCommands.RmSudoCommand}: Remove sudo users (Only Owner)
-
 /{BotCommands.RestartCommand}: Restart and update the bot
-
+/{BotCommands.SleepCommand}: IDLE the bot
 /{BotCommands.LogCommand}: Get a log file of the bot. Handy for getting crash reports
 '''
 
 def bot_help(update, context):
     button = ButtonMaker()
-    button.buildbutton("Other Commands", f"https://telegra.ph/{help}")
+    button.buildbutton("Other Commands", f"https://graph.org/{help}")
     reply_markup = InlineKeyboardMarkup(button.build_menu(1))
     sendMarkup(help_string, context.bot, update.message, reply_markup)
 
 def main():
     start_cleanup()
+    notifier_dict = False
     if INCOMPLETE_TASK_NOTIFIER and DB_URI is not None:
-        notifier_dict = DbManger().get_incomplete_tasks()
-        if notifier_dict:
+        if notifier_dict := DbManger().get_incomplete_tasks():
             for cid, data in notifier_dict.items():
                 if ospath.isfile(".restartmsg"):
                     with open(".restartmsg") as f:
@@ -216,16 +202,16 @@ def main():
                 else:
                     msg = 'Bot Restarted!'
                 for tag, links in data.items():
-                     msg += f"\n\n{tag}: "
+                     msg += f"\nIncomplete Tasks List:\n\n{tag}: "
                      for index, link in enumerate(links, start=1):
-                         msg += f" <a href='{link}'>{index}</a> |"
+                         msg += f" <a href='{link}'>{index}</a> \n"
                          if len(msg.encode()) > 4000:
                              if 'Restarted successfully!' in msg and cid == chat_id:
                                  bot.editMessageText(msg, chat_id, msg_id, parse_mode='HTMl', disable_web_page_preview=True)
                                  osremove(".restartmsg")
                              else:
                                  try:
-                                     bot.sendMessage(cid, msg, 'HTML')
+                                     bot.sendMessage(cid, msg, 'HTML', disable_web_page_preview=True)
                                  except Exception as e:
                                      LOGGER.error(e)
                              msg = ''
@@ -234,7 +220,7 @@ def main():
                      osremove(".restartmsg")
                 else:
                     try:
-                        bot.sendMessage(cid, msg, 'HTML')
+                        bot.sendMessage(cid, msg, 'HTML', disable_web_page_preview=True)
                     except Exception as e:
                         LOGGER.error(e)
 
@@ -243,6 +229,12 @@ def main():
             chat_id, msg_id = map(int, f)
         bot.edit_message_text("Restarted successfully!", chat_id, msg_id)
         osremove(".restartmsg")
+    elif not notifier_dict and AUTHORIZED_CHATS:
+        for id_ in AUTHORIZED_CHATS:
+            try:
+                bot.sendMessage(id_, "Bot Restarted Successfully!", 'HTML')
+            except Exception as e:
+                LOGGER.error(e)
 
     start_handler = CommandHandler(BotCommands.StartCommand, start, run_async=True)
     ping_handler = CommandHandler(BotCommands.PingCommand, ping,
