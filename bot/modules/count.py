@@ -25,7 +25,7 @@ def countNode(update, context):
         else:
             tag = reply_to.from_user.mention_html(reply_to.from_user.first_name)
     if is_gdrive_link(link):
-        msg = sendMessage(f"Counting: <code>{link}</code>", context.bot, update.message)
+        msg = sendMessage(f"Just Sit Down & Relax. I will mention you once I'm done with Counting: <code>{link}</code>", context.bot, update.message)
         gd = GoogleDriveHelper()
         result = gd.count(link)
         deleteMessage(context.bot, msg)
