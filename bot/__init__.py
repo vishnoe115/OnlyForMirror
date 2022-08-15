@@ -156,6 +156,12 @@ try:
 except KeyError:
     BOT_PM = False
 try:
+    TITLE_NAME = getConfig('TITLE_NAME')
+    if len(TITLE_NAME) == 0:
+        TITLE_NAME = 'Dhruv-Mirror'
+except KeyError:
+    TITLE_NAME = 'Dhruv-Mirror'    
+try:
     aid = getConfig('AUTHORIZED_CHATS')
     aid = aid.split()
     for _id in aid:
