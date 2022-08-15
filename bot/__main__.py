@@ -167,7 +167,6 @@ help_string = f'''
 /{BotCommands.AddSudoCommand}: Add sudo user (Only Owner)
 /{BotCommands.RmSudoCommand}: Remove sudo users (Only Owner)
 /{BotCommands.RestartCommand}: Restart and update the bot
-/{BotCommands.SleepCommand}: IDLE the bot
 /{BotCommands.LogCommand}: Get a log file of the bot. Handy for getting crash reports
 '''
 
