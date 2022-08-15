@@ -12,7 +12,7 @@ from bot.helper.telegram_helper import button_build
 def list_buttons(update, context):
     user_id = update.message.from_user.id
     if len(context.args) == 0:
-        return sendMessage('Send a search key along with command', context.bot, update.message)
+        return sendMessage('Send me the /list command with Something which you wanna Search in Drive ! Example : /list Batman', context.bot, update.message)
     buttons = button_build.ButtonMaker()
     buttons.sbutton("Folders", f"types {user_id} folders")
     buttons.sbutton("Files", f"types {user_id} files")
@@ -45,7 +45,7 @@ def _list_drive(key, bmsg, item_type):
     if button:
         editMessage(msg, bmsg, button)
     else:
-        editMessage(f'No result found for <i>{key}</i>', bmsg)
+        editMessage(f'Oops.. No result found for <i>{key}</i>', bmsg)
 
 list_handler = CommandHandler(BotCommands.ListCommand, list_buttons, filters=CustomFilters.authorized_chat | CustomFilters.authorized_user, run_async=True)
 list_type_handler = CallbackQueryHandler(select_type, pattern="types", run_async=True)
