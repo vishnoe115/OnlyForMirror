@@ -183,7 +183,7 @@ class MirrorListener:
             except Exception as e:
                 LOGGER.error(str(e))
             count = len(download_dict)
-        msg = f"{self.tag} your download has been stopped due to: {error}"
+        msg = f"Sorry {self.tag} but your download has been stopped due to: {error} . Better Luck next time!"
         sendMessage(msg, self.bot, self.message)
         if count == 0:
             self.clean()
@@ -241,9 +241,9 @@ class MirrorListener:
             msg += f'\n<b>Total Files: </b>{folders}'
             if typ != 0:
                 msg += f'\n<b>Corrupted Files: </b>{typ}'
-            msg += f'\n\n<b>Hey </b>{self.tag} <b>Your Job is Done</b>'
+            msg += f'\n\n<b>Hey </b>{self.tag} <b>Your task is Completed. Join Leech Dump if you want access to the file.</b>'
             msg += f'\n<b>It Tooks:</b> {get_readable_time(time() - self.message.date.timestamp())}'
-            msg += f'\n\n<b>Thanks For using {TITLE_NAME}!</b>'
+            msg += f'\n\n<b>Thank You For using {TITLE_NAME}! Keep Supporting & Keep Loving!</b>'
             if not files:
                 sendMessage(msg, self.bot, self.message)
             else:
@@ -261,9 +261,9 @@ class MirrorListener:
             if ospath.isdir(f'{DOWNLOAD_DIR}{self.uid}/{name}'):
                 msg += f'\n<b>SubFolders: </b>{folders}'
                 msg += f'\n<b>Files: </b>{files}'
-            msg += f'\n\n<b>Hey </b>{self.tag} <b>Your Job is Done</b>'
+            msg += f'\n\n<b>Hey </b>{self.tag} <b>Your task is Completed. Join Leech Dump if you want access to the file.</b>'
             msg += f'\n<b>It Tooks:</b> {get_readable_time(time() - self.message.date.timestamp())}'
-            msg += f'\n\n<b>Thanks For using {TITLE_NAME}</b>'
+            msg += f'\n\n<b>Thank You For using {TITLE_NAME}! Keep Supporting & Keep Loving!</b>'
             buttons = ButtonMaker()
             link = short_url(link)
             buttons.buildbutton("☁️ Drive Link ☁️", link)
@@ -483,7 +483,7 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
                 link = file.get_file().file_path
 
     if not is_url(link) and not is_magnet(link) and not ospath.exists(link):
-        help_msg = "<b>Kindly Send Link With the Proper Command else Check /help!</b>"
+        help_msg = "<b>Kindly Send Link With the Proper Command else Check help command!</b>"
         return sendMessage(help_msg, bot, message)
 
     LOGGER.info(link)
@@ -505,7 +505,9 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
 
     if is_gdrive_link(link):
         if not isZip and not extract and not isLeech:
-            gmsg = f"Use /clone Command! !\n\n"
+            gmsg = f"Use /{BotCommands.CloneCommand} to clone Google Drive file/folder\n\n"
+            gmsg += f"Use /{BotCommands.ZipMirrorCommand} to make zip of Google Drive folder\n\n"
+            gmsg += f"Use /{BotCommands.UnzipMirrorCommand} to extracts Google Drive archive file"
             sendMessage(gmsg, bot, message)
         else:
             Thread(target=add_gd_download, args=(link, listener, is_gdtot)).start()
