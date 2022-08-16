@@ -155,7 +155,7 @@ help_string_telegraph = f'''<br>
 '''
 
 help = telegraph.create_page(
-        title= f'{TITLE_NAME} Help',
+        title='Mirror-Leech-Bot Help',
         content=help_string_telegraph,
     )["path"]
 
@@ -172,7 +172,7 @@ help_string = f'''
 
 def bot_help(update, context):
     button = ButtonMaker()
-    button.buildbutton("Other Commands", f"https://graph.org/{help}")
+    button.buildbutton("Other Commands", f"https://telegra.ph/{help}")
     reply_markup = InlineKeyboardMarkup(button.build_menu(1))
     sendMarkup(help_string, context.bot, update.message, reply_markup)
 
