@@ -13,7 +13,7 @@ from telegram import InlineKeyboardMarkup, InlineKeyboardButton, ParseMode
 
 from bot import bot, Interval, INDEX_URL, BUTTON_FOUR_NAME, BUTTON_FOUR_URL, BUTTON_FIVE_NAME, BUTTON_FIVE_URL, \
                 BUTTON_SIX_NAME, BUTTON_SIX_URL, VIEW_LINK, aria2, QB_SEED, MIRROR_LOGS, BOT_PM, dispatcher, DOWNLOAD_DIR, \
-                download_dict, download_dict_lock, SOURCE_LINK, TG_SPLIT_SIZE, LOGGER, MEGA_KEY, DB_URI, INCOMPLETE_TASK_NOTIFIER, TITLE_NAME
+                download_dict, download_dict_lock, SOURCE_LINK, TG_SPLIT_SIZE, LOGGER, MEGA_KEY, DB_URI, INCOMPLETE_TASK_NOTIFIER, TITLE_NAME, LEECH_LOG
 from bot.helper.ext_utils.bot_utils import is_url, is_magnet, is_gdtot_link, is_mega_link, is_gdrive_link, get_content_type, get_readable_time
 from bot.helper.ext_utils.fs_utils import get_base_name, get_path_size, split_file, clean_download
 from bot.helper.ext_utils.shortenurl import short_url
@@ -256,13 +256,20 @@ class MirrorListener:
                         fmsg = ''
                 if fmsg != '':
                     sendMessage(msg + fmsg, self.bot, self.message)
+                if LEECH_LOG:
+                    try:
+                        for chatid in LEECH_LOG:
+                            bot.sendMessage(chat_id=chatid, text=msg + fmsg,
+                                            parse_mode=ParseMode.HTML)
+                    except Exception as e:
+                        LOGGER.warning(e)    
         else:
             msg += f'\n<b>Type: </b>{typ}'
             if ospath.isdir(f'{DOWNLOAD_DIR}{self.uid}/{name}'):
                 msg += f'\n<b>SubFolders: </b>{folders}'
                 msg += f'\n<b>Files: </b>{files}'
-            msg += f'\n\n<b>Hey </b>{self.tag} <b>Your task is Completed. Join Leech Dump if you want access to the file.</b>'
-            msg += f'\n<b>It Tooks:</b> {get_readable_time(time() - self.message.date.timestamp())}'
+            msg += f'\n\n<b>Hey </b>{self.tag} <b>Your task is Completed. Join Dump if you want access to the file. The File will be sent in PM Eventually</b>'
+            msg += f'\n<b>It Took:</b> {get_readable_time(time() - self.message.date.timestamp())} to Complete your Task.!'
             msg += f'\n\n<b>Thank You For using {TITLE_NAME}! Keep Supporting & Keep Loving!</b>'
             buttons = ButtonMaker()
             link = short_url(link)
@@ -599,15 +606,15 @@ qb_zip_mirror_handler = CommandHandler(BotCommands.QbZipMirrorCommand, qb_zip_mi
 leech_handler = CommandHandler(BotCommands.LeechCommand, leech,
                                 filters=CustomFilters.owner_filter, run_async=True)
 unzip_leech_handler = CommandHandler(BotCommands.UnzipLeechCommand, unzip_leech,
-                                filters=CustomFilters.owner_filter, run_async=True)
+                                filters=CustomFilters.owner_filter | CustomFilters.sudo_user, run_async=True)
 zip_leech_handler = CommandHandler(BotCommands.ZipLeechCommand, zip_leech,
-                                filters=CustomFilters.owner_filter, run_async=True)
+                                filters=CustomFilters.owner_filter | CustomFilters.sudo_user, run_async=True)
 qb_leech_handler = CommandHandler(BotCommands.QbLeechCommand, qb_leech,
-                                filters=CustomFilters.owner_filter, run_async=True)
+                                filters=CustomFilters.owner_filter | CustomFilters.sudo_user, run_async=True)
 qb_unzip_leech_handler = CommandHandler(BotCommands.QbUnzipLeechCommand, qb_unzip_leech,
-                                filters=CustomFilters.owner_filter, run_async=True)
+                                filters=CustomFilters.owner_filter | CustomFilters.sudo_user, run_async=True)
 qb_zip_leech_handler = CommandHandler(BotCommands.QbZipLeechCommand, qb_zip_leech,
-                                filters=CustomFilters.owner_filter, run_async=True)
+                                filters=CustomFilters.owner_filter | CustomFilters.sudo_user, run_async=True)
 
 dispatcher.add_handler(mirror_handler)
 dispatcher.add_handler(unzip_mirror_handler)
