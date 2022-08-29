@@ -183,7 +183,7 @@ class MirrorListener:
             except Exception as e:
                 LOGGER.error(str(e))
             count = len(download_dict)
-        msg = f"Sorry {self.tag} but your download has been stopped due to: {error} . Better Luck next time!"
+        msg = f"Sorry {self.tag} but your download has been stopped due to: \n{error} ! Better Luck next time!  #{error}"
         sendMessage(msg, self.bot, self.message)
         if count == 0:
             self.clean()
@@ -242,6 +242,7 @@ class MirrorListener:
             if typ != 0:
                 msg += f'\n<b>Corrupted Files: </b>{typ}'
             msg += f'\n\n<b>Hey </b>{self.tag} <b>Your task is Completed. Join Leech Dump if you want access to the file.</b>'
+            msg += f'\n\n<b>The FIle will be sent in PM Eventually</b>'
             msg += f'\n<b>It Tooks:</b> {get_readable_time(time() - self.message.date.timestamp())}'
             msg += f'\n\n<b>Thank You For using {TITLE_NAME}! Keep Supporting & Keep Loving!</b>'
             if not files:
@@ -300,7 +301,7 @@ class MirrorListener:
                     mesg = message_args[1]
                     if is_magnet(mesg):
                         link = telegraph.create_page(
-                            title='Helios-Mirror Source Link',
+                            title='Dhruv-Mirror Source Link',
                             content=mesg,
                         )["path"]
                         buttons.buildbutton(f"🔗 Source Link 🔗", f"https://telegra.ph/{link}")
@@ -393,7 +394,7 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
     
     if BOT_PM and message.chat.type != 'private':
         try:
-            msg1 = f'Added your Requested link to Download !\nWill send here once done.'
+            msg1 = f'I have Added your Requested link to Download !\nWill send here once done.'
             send = bot.sendMessage(message.from_user.id, text=msg1)
         except Exception as e:
             LOGGER.warning(e)
@@ -401,7 +402,7 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
             b_uname = bot_d.username
             uname = f'<a href="tg://user?id={message.from_user.id}">{message.from_user.first_name}</a>'
             botstart = f"http://t.me/{b_uname}"
-            buttons.buildbutton("Start Me", f"{botstart}")
+            buttons.buildbutton("Click Here", f"{botstart}")
             startwarn = f"Dear {uname},\n\n<b>I found that you haven't started me in Private yet.</b>\n\n" \
                         f"Start me in Private & then Add your task here again!"
             message = sendMarkup(startwarn, bot, message, InlineKeyboardMarkup(buttons.build_menu(2)))
@@ -491,7 +492,7 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
                 link = file.get_file().file_path
 
     if not is_url(link) and not is_magnet(link) and not ospath.exists(link):
-        help_msg = "<b>Kindly Send Link With the Proper Command else Check help command!</b>"
+        help_msg = "<b>Kindly Send Link With the Proper Command else Check help command! \n Or Watch others how to use me!</b>"
         return sendMessage(help_msg, bot, message)
 
     LOGGER.info(link)
