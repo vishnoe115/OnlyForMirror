@@ -57,14 +57,14 @@ def _clone(message, bot, multi=0):
     is_appdrive = is_appdrive_link(link)
     if is_gdtot:
         try:
-            msg = sendMessage(f"<b>Hey! Please Wait While I'm Processing:</b>\n\n <code>{link}</code> \n\n I will Start Cloning after Processing Link", bot, message)
+            msg = sendMessage(f"<b>Hey! Please Wait While I'm Processing:</b>\n\n <code>{link}</code> \n\n <b>I will Start Cloning after Processing Link</b>", bot, message)
             link = gdtot(link)
             deleteMessage(bot, msg)
         except DirectDownloadLinkException as e:
             deleteMessage(bot, msg)
             return sendMessage(str(e), bot, message)
     if is_appdrive:
-        msg = sendMessage(f"<b>Please Wait While I'm Processing:</b>\n\n <code>{link}</code> \n\n I will Start Cloning after Processing Link", bot, message)
+        msg = sendMessage(f"<b>Please Wait While I'm Processing:</b>\n\n <code>{link}</code> \n\n <b>I will Start Cloning after Processing Link</b>", bot, message)
         try:
             apdict = appdrive(link)
             link = apdict.get('gdrive_link')
@@ -81,12 +81,12 @@ def _clone(message, bot, multi=0):
             LOGGER.info('Checking File/Folder if already in Drive...')
             smsg, button = gd.drive_list(name, True, True)
             if smsg:
-                msg3 = "<b>Well Kudos to me! I saved your time !</b>.\n <b>Here you go:\n </b>"
+                msg3 = "<b>Well Kudos to me! I saved your time !</b>.\n <b>Here you go:</b>\n\n"
                 return sendMarkup(msg3, bot, message, button)
         if CLONE_LIMIT is not None:
             LOGGER.info('Checking File/Folder Size...')
             if size > CLONE_LIMIT * 1024**3:
-                msg2 = f'Sad. The Clone limit is {CLONE_LIMIT}GB.\nWhile Your File/Folder size is {get_readable_file_size(size)} So .'
+                msg2 = f'<b>Sad. The Clone limit is</b> {CLONE_LIMIT}GB.\n<b>While Your File/Folder size is</b> {get_readable_file_size(size)} So .'
                 return sendMessage(msg2, bot, message)
         if multi > 1:
             sleep(4)
@@ -97,7 +97,7 @@ def _clone(message, bot, multi=0):
             sleep(4)
             Thread(target=_clone, args=(nextmsg, bot, multi)).start()
         if files <= 20:
-            msg = sendMessage(f"<b>Almost there, I'm  Cloning:</b>\n\n <code>{link}</code> \n\n Your Drive Link is Ready!", bot, message)
+            msg = sendMessage(f"<b>Almost there, I'm  Cloning:</b>\n\n <code>{link}</code> \n\n <b>Your Drive Link is Ready!</b>", bot, message)
             result, button = gd.clone(link)
             deleteMessage(bot, msg)
         else:
@@ -120,7 +120,7 @@ def _clone(message, bot, multi=0):
                     update_all_messages()
             except IndexError:
                 pass
-        cc = f'\n\n<b>cc: </b>{tag}'
+        cc = f'\n\n<b>Credits : </b>{tag}'
         if button in ["cancelled", ""]:
             sendMessage(f"{tag} {result}", bot, message)
         else:
